@@ -1,7 +1,8 @@
 <?php
 
-include ('vendor/autoload.php');
+require_once 'App/Pusher.php';
 
+include ('vendor/autoload.php');
 // Database connection parameters
 $servername = "localhost";
 $username = "root"; 
@@ -24,11 +25,8 @@ if (isset($_POST['student_name']) && isset($_POST['student_email']) && isset($_P
     $sql = "INSERT INTO student (name, email, password) VALUES ('$name', '$email', '$password')";
     
     if ($conn->query($sql) === TRUE) {
-        $app_id = '1761069';
-        $app_key = 'a1db0e59c650abfd58b8';
-        $app_secret = '996722b6b19375dff051';
-        $app_cluster = 'mt1';
-        $pusher= new Pusher\Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);
+       
+        $pusher= new AppPusher();
 
         $data['message']=array(
             'student_name'=>$name,
@@ -37,6 +35,7 @@ if (isset($_POST['student_name']) && isset($_POST['student_email']) && isset($_P
         );
         $pusher->trigger('snugly-canopy-602', 'add_student', $data);
         echo "New record created successfully";
+        header('location:index.php?success');
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }

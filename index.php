@@ -13,6 +13,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Registration Student</h4>
+                        <?php
+                        if (isset($_GET['success'])) {
+                            echo '<script>alert("Successfully")</script>';
+                        }
+                        ?>
                     </div>
                     <div class="card-body">
                         <form action="process.php" method="POST">
